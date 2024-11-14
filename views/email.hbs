@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Email</title>
+</head>
+<body>
+<h2>Użytkownicy z bazy:</h2>
+
+{{> navbar }}
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Email</th>
+        <th>Dział</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each users}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.surname}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.token}}</td>
+            <td>
+                <input type="checkbox" name="send" value="{{this.email}}">
+            </td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>
+
+<h3>Wyślij e-maile</h3>
+
+<button id="sendEmails">Wyślij e-maile do zaznaczonych</button>
+
+<script>
+    const sendEmails = document.getElementById('sendEmails');
+
+    sendEmails.addEventListener('click', () => {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const emails = [];
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                emails.push(checkbox.value);
+            }
+        });
+
+        fetch('/send-emails', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({emails})
+        })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                });
+    });
+</script>
+
+</body>
+</html>
