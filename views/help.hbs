@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomoc - Aplikacja Node.js</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 4px;
+      font-size: 90%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pomoc - Przewodnik po aplikacji Node.js</h1>
+
+  <ol>
+    <li><a href="#db-communication">Jak aplikacja Node.js komunikuje się z bazami danych?</a></li>
+    <li><a href="#email-sending">Jak wysyłać e-maile z poziomu aplikacji Node.js?</a></li>
+    <li><a href="#requirements">Jakie są wymagania dla integracji z bazą danych i pocztą e-mail?</a></li>
+    <li><a href="#email-methods">Jakie metody wysyłania e-maili są dostępne w Node.js?</a></li>
+  </ol>
+
+  <h2 id="db-communication">1. Jak aplikacja Node.js komunikuje się z bazami danych?</h2>
+  <p>Node.js obsługuje komunikację z różnymi bazami danych, w tym SQL (np. MySQL, PostgreSQL) oraz NoSQL (np. MongoDB). Asynchroniczne operacje umożliwiają Node.js obsługę wielu zapytań do bazy danych jednocześnie, co jest idealne dla aplikacji o dużym ruchu.</p>
+
+  <h2 id="email-sending">2. Jak wysyłać e-maile z poziomu aplikacji Node.js?</h2>
+  <p>Node.js pozwala na wysyłanie e-maili za pomocą SMTP lub usług zewnętrznych. Najpopularniejszą biblioteką do SMTP jest <code>nodemailer</code>, która wspiera takich dostawców jak Gmail i Outlook. Alternatywnie, usługi jak SendGrid lub AWS SES oferują API do wysyłania e-maili.</p>
+  <pre><code>const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD
+  }
+});
+
+const mailOptions = {
+  from: 'twojemail@gmail.com',
+  to: 'odbiorca@gmail.com',
+  subject: 'Testowy e-mail',
+  text: 'Witaj, to jest testowy e-mail z Node.js!'
+};
+
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('E-mail wysłany: ' + info.response);
+  }
+});
+</code></pre>
+
+  <h2 id="requirements">3. Jakie są wymagania dla integracji z bazą danych i pocztą e-mail?</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Wymaganie</th>
+        <th>Opis</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Środowisko Node.js</td>
+        <td>Node.js i potrzebne biblioteki muszą być zainstalowane.</td>
+      </tr>
+      <tr>
+        <td>Biblioteka bazy danych</td>
+        <td>Zainstaluj biblioteki jak <code>mysql2</code>, <code>pg</code> lub <code>mongoose</code> zależnie od typu bazy danych.</td>
+      </tr>
+      <tr>
+        <td>Biblioteka e-mailowa</td>
+        <td>Użyj <code>nodemailer</code> do SMTP lub innych bibliotek do API.</td>
+      </tr>
+      <tr>
+        <td>Zmienna środowiskowa</td>
+        <td>Przechowuj dane autoryzacyjne w pliku <code>.env</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 id="email-methods">4. Jakie metody wysyłania e-maili są dostępne w Node.js?</h2>
+  <p>Najpopularniejsze metody wysyłania e-maili w Node.js to:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Metoda</th>
+        <th>Zalety</th>
+        <th>Wady</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>SMTP (np. Nodemailer)</td>
+        <td>Elastyczna i powszechnie wspierana</td>
+        <td>Wymaga zarządzania danymi SMTP, limitowana liczba wiadomości</td>
+      </tr>
+      <tr>
+        <td>API (np. SendGrid, AWS SES)</td>
+        <td>Niezawodna, wysoka dostarczalność</td>
+        <td>Uzależnienie od usług zewnętrznych, potencjalne koszty</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
